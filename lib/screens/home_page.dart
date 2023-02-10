@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -37,27 +38,29 @@ class _HomePageState extends State<HomePage> {
         onPressed: getImage,
         child: Icon(Icons.add_a_photo),
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: _xfile != null
-            ? Image.file(
-                File(_xfile!.path),
-                fit: BoxFit.fitWidth,
-              )
-            : Container(),
+      body: Column(
+        children: [
+          if (_xfile != null)
+            Image.file(
+              File(_xfile!.path),
+              fit: BoxFit.fitWidth,
+            ),
+          Text("$_text"),
+        ],
       ),
     );
   }
 
   Future scanText() async {
     showDialog(
+      // this is not save, bt can do the trick, closing with Navigator.of(context).pop(); on end
       context: context,
       builder: (context) => Center(
         child: CircularProgressIndicator(),
       ),
     );
     if (_xfile == null) {
+      log("got null on image file");
       return;
     }
     final inputImage = InputImage.fromFilePath(_xfile!.path);
@@ -69,6 +72,10 @@ class _HomePageState extends State<HomePage> {
         _text += line.text + "\n";
       }
     }
+
+    log("data $_text");
+    Navigator.of(context).pop();
+    setState(() {}); // to update the ui.
   }
 
   Future getImage() async {
