@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String cell = "";
   String _text = "";
   XFile? _xfile;
   // List<String> emailExtraction(String string) {
@@ -72,6 +73,7 @@ class _HomePageState extends State<HomePage> {
               //   style: TextStyle(fontWeight: FontWeight.bold),
               // ),
               Text("Email address: " + regExp.allMatches("$_text").toString()),
+              Text("cell $cell"),
             ],
           ),
         ),
@@ -79,6 +81,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int getNumberOnly(String text) =>
+      int.parse(text.replaceAll(RegExp('[^0-9]'), ''));
   Future scanText() async {
     showDialog(
       context: context,
@@ -96,6 +100,9 @@ class _HomePageState extends State<HomePage> {
 
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
+        if (line.text.toLowerCase().contains("cell")) {
+          cell = getNumberOnly(line.text.trim()).toString();
+        }
         _text += line.text + "\n";
       }
     }
