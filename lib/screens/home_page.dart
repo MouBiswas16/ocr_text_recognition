@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_local_variable, unnecessary_null_comparison
 
 import 'dart:developer';
 import 'dart:io';
@@ -17,10 +17,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _text = "";
   XFile? _xfile;
-  final picker = ImagePicker();
-
+  // List<String> emailExtraction(String string) {
+  //   final emailPattern = RegExp(r'\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b',
+  //       caseSensitive: false, multiLine: true);
+  //   final matches = emailPattern.allMatches("$_text");
+  //   final List<String> emails = [];
+  //   if (matches != null) {
+  //     for (final Match match in matches) {
+  //       emails.add(string.substring(match.start, match.end));
+  //     }
+  //   }
+  //   return emails;
+  // }
+  RegExp regExp = RegExp(
+    r"^(?:[+0]9)?[0-9]{10}$",
+    caseSensitive: false,
+    multiLine: false,
+  );
   @override
   Widget build(BuildContext context) {
+    // final emails = emailExtraction('$_text');
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Text Recognition"),
@@ -38,22 +55,32 @@ class _HomePageState extends State<HomePage> {
         onPressed: getImage,
         child: Icon(Icons.add_a_photo),
       ),
-      body: Column(
-        children: [
-          if (_xfile != null)
-            Image.file(
-              File(_xfile!.path),
-              fit: BoxFit.fitWidth,
-            ),
-          Text("$_text"),
-        ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              if (_xfile != null)
+                Image.file(
+                  File(_xfile!.path),
+                  fit: BoxFit.fitWidth,
+                ),
+
+              SelectableText("$_text"),
+              // Text(
+              //   "Email address: $emails",
+              //   style: TextStyle(fontWeight: FontWeight.bold),
+              // ),
+              Text("Email address: " + regExp.allMatches("$_text").toString()),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Future scanText() async {
     showDialog(
-      // this is not save, bt can do the trick, closing with Navigator.of(context).pop(); on end
       context: context,
       builder: (context) => Center(
         child: CircularProgressIndicator(),
@@ -75,7 +102,7 @@ class _HomePageState extends State<HomePage> {
 
     log("data $_text");
     Navigator.of(context).pop();
-    setState(() {}); // to update the ui.
+    setState(() {});
   }
 
   Future getImage() async {
