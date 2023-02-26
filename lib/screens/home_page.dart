@@ -18,27 +18,14 @@ class _HomePageState extends State<HomePage> {
   String cell = "";
   String _text = "";
   XFile? _xfile;
-  // List<String> emailExtraction(String string) {
-  //   final emailPattern = RegExp(r'\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b',
-  //       caseSensitive: false, multiLine: true);
-  //   final matches = emailPattern.allMatches("$_text");
-  //   final List<String> emails = [];
-  //   if (matches != null) {
-  //     for (final Match match in matches) {
-  //       emails.add(string.substring(match.start, match.end));
-  //     }
-  //   }
-  //   return emails;
-  // }
+
   RegExp regExp = RegExp(
-    r"^(?:[+0]9)?[0-9]{10}$",
+    r"^(?:\+?88|0088)?01[15-9]\d{8}$",
     caseSensitive: false,
     multiLine: false,
   );
   @override
   Widget build(BuildContext context) {
-    // final emails = emailExtraction('$_text');
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Text Recognition"),
@@ -66,14 +53,12 @@ class _HomePageState extends State<HomePage> {
                   File(_xfile!.path),
                   fit: BoxFit.fitWidth,
                 ),
-
               SelectableText("$_text"),
-              // Text(
-              //   "Email address: $emails",
-              //   style: TextStyle(fontWeight: FontWeight.bold),
-              // ),
-              Text("Email address: " + regExp.allMatches("$_text").toString()),
-              Text("cell $cell"),
+              // Text("Email address: " + regExp.allMatches("$_text").toString()),
+              Text(
+                "cell $cell",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         ),
@@ -81,8 +66,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  int getNumberOnly(String text) =>
-      int.parse(text.replaceAll(RegExp('[^0-9]'), ''));
+  int getNumberOnly(String text) => int.parse(
+        text.replaceAll(RegExp('[^0-9]'), ''),
+      );
+
   Future scanText() async {
     showDialog(
       context: context,
