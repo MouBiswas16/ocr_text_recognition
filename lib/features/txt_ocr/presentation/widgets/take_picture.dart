@@ -18,9 +18,9 @@ class TakePicture extends StatefulWidget {
 }
 
 class _TakePictureState extends State<TakePicture> {
-  late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
-  late File file;
+  CameraController? _controller;
+  Future? _initializeControllerFuture;
+  File? file;
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _TakePictureState extends State<TakePicture> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -57,7 +57,7 @@ class _TakePictureState extends State<TakePicture> {
             if (snapshot.connectionState == ConnectionState.done) {
               return Stack(
                 children: [
-                  CameraPreview(_controller),
+                  CameraPreview(_controller!),
                   FocusRectangle(
                     color: Colors.cyan,
                   )
@@ -74,9 +74,9 @@ class _TakePictureState extends State<TakePicture> {
           onPressed: () async {
             try {
               await _initializeControllerFuture;
-              final image = await _controller.takePicture();
-              file = File(image.path);
-              BlocProvider.of<TxtOcrCubit>(context).scanTxt(file);
+              final image = await _controller?.takePicture();
+              file = File(image?.path as String);
+              BlocProvider.of<TxtOcrCubit>(context).scanTxt(file!);
             } catch (e) {
               if (kDebugMode) {
                 print(e);

@@ -20,6 +20,8 @@ dependencies:
   intl: ^0.18.0
   path: null
   path_provider: ^2.0.13
+  # firebase-functions: "^4.2.1"
+  # google-cloud/vision: "^2.1.2"
 
   flutter:
     sdk: flutter

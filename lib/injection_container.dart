@@ -9,6 +9,9 @@ import 'features/txt_ocr/domain/repository/txt_ocr_repository.dart';
 import 'features/txt_ocr/domain/usecases/txt_ocr_usecase.dart';
 import 'features/txt_ocr/presentation/bloc/txt_ocr_cubit.dart';
 
+import * as functions from "firebase-functions";
+import vision from "@google-cloud/vision";
+
 final s1 = GetIt.instance;
 
 Future<void> init() async {
@@ -30,5 +33,6 @@ Future<void> init() async {
   s1.registerLazySingleton(() => ImagePicker());
 
   // //text recognition
-  // s1.registerSingletonAsync(() => ());
+  s1.registerSingletonAsync(
+      () => GoogleMlKit.vision.textRecognizer());
 }
