@@ -12,9 +12,9 @@ CameraDescription? cameraDescription;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final camera = await availableCameras();
-  final firstCamera = camera.first;
-  cameraDescription = firstCamera;
+  // final camera = await availableCameras();
+  // final firstCamera = camera.first;
+  // cameraDescription = firstCamera;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

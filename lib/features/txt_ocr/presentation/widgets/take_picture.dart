@@ -4,9 +4,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ocr_text_recognition/features/txt_ocr/presentation/bloc/txt_ocr_cubit.dart';
-import 'package:ocr_text_recognition/features/txt_ocr/presentation/bloc/txt_ocr_state.dart';
 
+import '../bloc/txt_ocr_cubit.dart';
+import '../bloc/txt_ocr_state.dart';
 import '../pages/detail_text_recognition.dart';
 
 class TakePicture extends StatefulWidget {
@@ -18,15 +18,16 @@ class TakePicture extends StatefulWidget {
 }
 
 class _TakePictureState extends State<TakePicture> {
-  CameraController? _controller;
+  CameraController? _controller; // cameraController
   Future? _initializeControllerFuture;
   File? file;
 
   @override
   void initState() {
-    _controller =
-        CameraController(widget.cameraDescription, ResolutionPreset.medium);
     super.initState();
+    _controller =
+        CameraController(widget.cameraDescription, ResolutionPreset.max);
+    _controller?.initialize();
   }
 
   @override
@@ -53,6 +54,7 @@ class _TakePictureState extends State<TakePicture> {
       child: Scaffold(
         body: FutureBuilder<void>(
           future: _initializeControllerFuture,
+          // future: CameraController.initialize(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Stack(

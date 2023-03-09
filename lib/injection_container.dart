@@ -9,10 +9,6 @@ import 'features/txt_ocr/domain/repository/txt_ocr_repository.dart';
 import 'features/txt_ocr/domain/usecases/txt_ocr_usecase.dart';
 import 'features/txt_ocr/presentation/bloc/txt_ocr_cubit.dart';
 
-import 'firebase_options.dart';
-
-import "package:cloud_firestore/cloud_firestore.dart";
-
 final s1 = GetIt.instance;
 
 Future<void> init() async {
@@ -33,10 +29,6 @@ Future<void> init() async {
   //image picker
   s1.registerLazySingleton(() => ImagePicker());
 
-//   // //text recognition
-//   s1.registerSingletonAsync(
-//       () => GoogleMlKit.vision.textRecognizer());
-//
-//
-  s1.registerSingleton(() => GoogleMlKit.vision.textRecognizer());
+  //text recognition
+  s1.registerLazySingleton(() => GoogleMlKit.vision.textRecognizer());
 }
