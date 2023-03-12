@@ -8,13 +8,13 @@ import 'package:ocr_text_recognition/firebase_options.dart';
 import 'injection_container.dart' as di;
 import 'injection_container.dart';
 
-CameraDescription? cameraDescription;
+CameraDescription? cameraDescription; //camera
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // final camera = await availableCameras();
-  // final firstCamera = camera.first;
-  // cameraDescription = firstCamera;
+  final camera = await availableCameras();
+  final firstCamera = camera.first;
+  cameraDescription = firstCamera;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
