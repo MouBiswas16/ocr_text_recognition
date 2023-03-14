@@ -23,7 +23,7 @@ class TakePicture extends StatefulWidget {
 
 class _TakePictureState extends State<TakePicture> {
   CameraController? _controller; // cameraController
-  Future? _initializeControllerFuture;
+  // Future? _initializeControllerFuture;
   File? file;
 
   @override
@@ -107,7 +107,7 @@ class _TakePictureState extends State<TakePicture> {
           // onPressed: imagePickerOptions,
           onPressed: () async {
             try {
-              await _initializeControllerFuture;
+              // await _initializeControllerFuture;
               final image = imagePickerOptions();
               file = File(image as String);
               BlocProvider.of<TxtOcrCubit>(context).scanTxt(file as File);
