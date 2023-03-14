@@ -1,8 +1,11 @@
+// ignore_for_file: body_might_complete_normally_nullable
+
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,7 +26,7 @@ class TakePicture extends StatefulWidget {
 
 class _TakePictureState extends State<TakePicture> {
   CameraController? _controller; // cameraController
-  // Future? _initializeControllerFuture;
+  Future? _initializeControllerFuture;
   File? file;
 
   @override
@@ -107,10 +110,12 @@ class _TakePictureState extends State<TakePicture> {
           // onPressed: imagePickerOptions,
           onPressed: () async {
             try {
-              // await _initializeControllerFuture;
-              final image = imagePickerOptions();
-              file = File(image as String);
-              BlocProvider.of<TxtOcrCubit>(context).scanTxt(file as File);
+              await _initializeControllerFuture;
+              final fetchedFile = await imagePickerOptions();
+              if (fetchedFile == null) {
+                debugPrint("got null file");
+              }
+              BlocProvider.of<TxtOcrCubit>(context).scanTxt(fetchedFile!);
             } catch (e) {
               if (kDebugMode) {
                 print(e);
@@ -125,8 +130,8 @@ class _TakePictureState extends State<TakePicture> {
     );
   }
 
-  void imagePickerOptions() {
-    showModalBottomSheet(
+  Future<File?> imagePickerOptions() async {
+    final result = await showModalBottomSheet<File?>(
       backgroundColor: Colors.white,
       context: context,
       builder: (context) {
@@ -137,31 +142,36 @@ class _TakePictureState extends State<TakePicture> {
                   Icons.photo_outlined,
                 ),
                 title: Text("Gallery"),
-                onTap: () => _pickImage(ImageSource.gallery)),
+                onTap: () async {
+                  final result = await _pickImage(ImageSource.gallery);
+                  Navigator.of(context).pop(result);
+                }),
             ListTile(
               leading: Icon(Icons.camera_alt_outlined),
               title: Text("Camera"),
-              onTap: () => _pickImage(ImageSource.camera),
+              onTap: () async {
+                final result = await _pickImage(ImageSource.camera);
+                Navigator.of(context).pop(result);
+              },
             ),
           ],
         );
       },
     );
+
+    return result;
   }
 
-  Future _pickImage(ImageSource source) async {
-    ImagePicker().pickImage(source: source);
-    // final image = await ImagePicker().pickImage(source: source);
-    // try {
-    //   final image = await ImagePicker().pickImage(source: source);
-    //   if (image == null) return;
-    //   File? img = File(image.path);
-    //   setState(() {
-    //     Navigator.of(context).pop();
-    //   });
-    // } on PlatformException catch (e) {
-    //   print(e);
-    //   Navigator.of(context).pop();
-    // }
+  Future<File?> _pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return null;
+      File? img = File(image.path);
+
+      return img;
+    } on PlatformException catch (e) {
+      print(e);
+      Navigator.of(context).pop();
+    }
   }
 }
