@@ -156,7 +156,6 @@ class _TakePictureState extends State<TakePicture> {
         );
       },
     );
-
     return result;
   }
 
