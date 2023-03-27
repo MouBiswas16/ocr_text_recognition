@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_nullable
+
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -159,10 +161,9 @@ class _TakePictureState extends State<TakePicture> {
     return result;
   }
 
-  Future<Object?> _pickImage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
+  Future<File?> _pickImage(ImageSource source) async {
     try {
-      // final image = await ImagePicker().pickImage(source: source);
+      final image = await ImagePicker().pickImage(source: source);
       if (image == null) return null;
       File? img = File(image.path);
 
@@ -171,6 +172,5 @@ class _TakePictureState extends State<TakePicture> {
       print(e);
       Navigator.of(context).pop();
     }
-    return image;
   }
 }
